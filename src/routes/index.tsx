@@ -1,18 +1,18 @@
-import { Button } from "#/components/ui/button";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
+import { auth } from '@clerk/tanstack-react-start/server'
 
-export const Route = createFileRoute("/")({ component: Home });
+const getAuthState = createServerFn().handler(async () => {
+  const authState = await auth()
+  return { isAuthenticated: authState?.isAuthenticated ?? false }
+})
 
-function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-      <Button variant="default" size="default">
-        Click me
-      </Button>
-    </div>
-  );
-}
+export const Route = createFileRoute('/')({
+  beforeLoad: async () => {
+    const { isAuthenticated } = await getAuthState()
+    if (isAuthenticated) {
+      throw redirect({ to: '/editor' })
+    }
+    throw redirect({ to: '/sign-in' })
+  },
+})

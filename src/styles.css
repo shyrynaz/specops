@@ -80,12 +80,12 @@ html,
 body,
 #app {
   min-height: 100%;
+  border-color: var(--color-border-default);
 }
 
 body {
   margin: 0;
-  background-color: var(--bg-base);
-  color: var(--text-primary);
+  background-color: var(--color-bg-base);
   font-family: var(--font-geist-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
