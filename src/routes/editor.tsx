@@ -1,9 +1,13 @@
-import { useState } from "react"
-import { createFileRoute } from "@tanstack/react-router"
-import { EditorNavbar } from "#/components/editor/editor-navbar"
-import { ProjectSidebar } from "#/components/editor/project-sidebar"
+import { useState } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
+import { EditorNavbar } from '#/components/editor/editor-navbar'
+import { ProjectSidebar } from '#/components/editor/project-sidebar'
+import { requireAuth } from '#/lib/auth'
 
-export const Route = createFileRoute("/editor")({ component: Editor })
+export const Route = createFileRoute('/editor')({
+  beforeLoad: async () => await requireAuth(),
+  component: Editor,
+})
 
 function Editor() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
